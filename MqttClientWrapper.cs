@@ -19,6 +19,7 @@ public class MqttClientWrapper : IDisposable
     private string _roomId = "";
     private string _topic = "";
     private string _clientId = "";
+    private string _mqttClientId = "";
     private bool _disposed = false;
     private CancellationTokenSource? _reconnectCts;
 
@@ -36,6 +37,7 @@ public class MqttClientWrapper : IDisposable
         _roomId = roomId;
         _topic = $"bp/training/room_{roomId}";
         _clientId = Guid.NewGuid().ToString("N")[..8];
+        _mqttClientId = $"bp_trainer_{_clientId}";
 
         await DisconnectInternalAsync();
 
@@ -108,7 +110,9 @@ public class MqttClientWrapper : IDisposable
 
             var options = new MqttClientOptionsBuilder()
                 .WithTcpServer("broker.hivemq.com", 1883)
-                .WithClientId($"bp_trainer_{Guid.NewGuid():N}")
+                .WithClientId(_mqttClientId)
+                .WithKeepAlivePeriod(TimeSpan.FromSeconds(30))
+                .WithTimeout(TimeSpan.FromSeconds(10))
                 .WithCleanSession()
                 .Build();
 
