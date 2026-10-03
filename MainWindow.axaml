@@ -1,0 +1,99 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:BPTrainer"
+        x:Class="BPTrainer.MainWindow"
+        Title="BP Trainer - BanPick远程对练"
+        Width="1400" Height="900"
+        MinWidth="1200" MinHeight="800"
+        Background="#0A0E1A"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Top Bar -->
+        <Border Grid.Row="0" Background="#0F1520" Padding="16,10" BorderBrush="#1A2535" BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                    <TextBlock Text="房间号:" VerticalAlignment="Center" Foreground="#8899AA" FontSize="14" />
+                    <TextBox x:Name="RoomIdInput" Width="80" MaxLength="4" Watermark="0000" FontSize="16" />
+                    <TextBlock Text="阵营:" VerticalAlignment="Center" Foreground="#8899AA" FontSize="14" />
+                    <ComboBox x:Name="SideSelector" Width="90" SelectedIndex="0">
+                        <ComboBoxItem Content="蓝色方" />
+                        <ComboBoxItem Content="红色方" />
+                    </ComboBox>
+                    <Button x:Name="ConnectBtn" Content="加入房间" Click="OnConnectClick" />
+                    <Button x:Name="DisconnectBtn" Content="断开" Click="OnDisconnectClick" IsVisible="False" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock x:Name="TurnIndicator" Text="" FontSize="18" FontWeight="Bold" Foreground="#FFD700" VerticalAlignment="Center" />
+                    <TextBlock x:Name="StepIndicator" Text="" FontSize="14" Foreground="#8899AA" VerticalAlignment="Center" />
+                    <Border x:Name="TimerBorder" Width="48" Height="48" CornerRadius="24" Background="#1A2332" BorderBrush="#2A3A4A" BorderThickness="2" VerticalAlignment="Center">
+                        <TextBlock x:Name="TimerText" Text="--" FontSize="18" FontWeight="Bold" Foreground="#FFD700" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                    <Border x:Name="ConnectionDot" Width="10" Height="10" CornerRadius="5" Background="#555" VerticalAlignment="Center" />
+                    <TextBlock x:Name="ConnectionStatus" Text="未连接" Foreground="#8899AA" VerticalAlignment="Center" />
+                    <Button x:Name="ExportBtn" Content="导出" Click="OnExportClick" IsVisible="False" />
+                    <Button x:Name="ReplayBtn" Content="复盘" Click="OnReplayClick" IsVisible="False" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content: Blue Sidebar | Hero Grid | Red Sidebar -->
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto">
+
+            <!-- Blue Side Panel -->
+            <Border Grid.Column="0" Width="150" Background="#0D1220" Padding="10,12" BorderBrush="#1A2535" BorderThickness="0,0,1,0">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="蓝色方" FontSize="16" FontWeight="Bold" Foreground="#4A9EFF" HorizontalAlignment="Center" Margin="0,0,0,6" />
+
+                    <TextBlock Text="BAN" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,0,0,2" />
+                    <Border x:Name="BlueBan0" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
+                    <Border x:Name="BlueBan1" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
+
+                    <TextBlock Text="PICK" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,8,0,2" />
+                    <Border x:Name="BluePick0" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick1" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick2" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick3" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick4" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+            <!-- Center: Hero Grid -->
+            <Border Grid.Column="1" Background="#0A0E1A" Padding="12">
+                <ScrollViewer>
+                    <StackPanel x:Name="HeroGrid" Spacing="4" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </ScrollViewer>
+            </Border>
+
+            <!-- Red Side Panel -->
+            <Border Grid.Column="2" Width="150" Background="#0D1220" Padding="10,12" BorderBrush="#1A2535" BorderThickness="1,0,0,0">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="红色方" FontSize="16" FontWeight="Bold" Foreground="#FF4A4A" HorizontalAlignment="Center" Margin="0,0,0,6" />
+
+                    <TextBlock Text="BAN" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,0,0,2" />
+                    <Border x:Name="RedBan0" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
+                    <Border x:Name="RedBan1" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
+
+                    <TextBlock Text="PICK" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,8,0,2" />
+                    <Border x:Name="RedPick0" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="RedPick1" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="RedPick2" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="RedPick3" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="RedPick4" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+        </Grid>
+
+        <!-- Bottom Status Bar -->
+        <Border Grid.Row="2" Background="#0F1520" Padding="16,8" BorderBrush="#1A2535" BorderThickness="0,1,0,0">
+            <TextBlock x:Name="StatusBar" Text="就绪" Foreground="#667788" FontSize="12" />
+        </Border>
+
+    </Grid>
+</Window>

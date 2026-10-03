@@ -1,0 +1,103 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="BPTrainer.ReplayWindow"
+        Title="BP复盘回放"
+        Width="1000" Height="700"
+        Background="#0A0E1A"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="#0F1520" Padding="16,12" BorderBrush="#1A2535" BorderThickness="0,0,0,1">
+            <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Center">
+                <TextBlock Text="BP复盘回放" FontSize="18" FontWeight="Bold" Foreground="#FFD700" VerticalAlignment="Center" />
+                <TextBlock x:Name="StepInfo" Text="" FontSize="14" Foreground="#8899AA" VerticalAlignment="Center" />
+            </StackPanel>
+        </Border>
+
+        <!-- Replay Content -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,*">
+
+            <!-- BP Display -->
+            <Border Grid.Row="0" Background="#0D1220" Padding="16,12" Margin="16,16,16,8">
+                <Grid ColumnDefinitions="*,Auto,*">
+
+                    <!-- Blue Side -->
+                    <StackPanel Grid.Column="0" Spacing="8">
+                        <TextBlock Text="蓝色方" FontSize="16" FontWeight="Bold" Foreground="#4A9EFF" HorizontalAlignment="Center" Margin="0,0,0,8" />
+
+                        <TextBlock Text="BAN" FontSize="12" Foreground="#667788" HorizontalAlignment="Center" Margin="0,0,0,4" />
+                        <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                            <Border x:Name="ReplayBlueBan0" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" />
+                            <Border x:Name="ReplayBlueBan1" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" />
+                        </StackPanel>
+
+                        <TextBlock Text="PICK" FontSize="12" Foreground="#667788" HorizontalAlignment="Center" Margin="0,8,0,4" />
+                        <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                            <Border x:Name="ReplayBluePick0" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" />
+                            <Border x:Name="ReplayBluePick1" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" />
+                            <Border x:Name="ReplayBluePick2" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" />
+                            <Border x:Name="ReplayBluePick3" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" />
+                            <Border x:Name="ReplayBluePick4" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Center: Current Action -->
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="24,0" Spacing="8">
+                        <Border Width="100" Height="100" CornerRadius="50" Background="#1A2332" BorderBrush="#FFD700" BorderThickness="2">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock x:Name="ActionSideText" Text="" FontSize="14" FontWeight="Bold" Foreground="#FFD700" HorizontalAlignment="Center" />
+                                <TextBlock x:Name="ActionTypeText" Text="" FontSize="20" FontWeight="Bold" Foreground="#FFD700" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                        <TextBlock x:Name="ActionHeroText" Text="" FontSize="14" Foreground="#CCCCCC" HorizontalAlignment="Center" />
+                    </StackPanel>
+
+                    <!-- Red Side -->
+                    <StackPanel Grid.Column="2" Spacing="8">
+                        <TextBlock Text="红色方" FontSize="16" FontWeight="Bold" Foreground="#FF4A4A" HorizontalAlignment="Center" Margin="0,0,0,8" />
+
+                        <TextBlock Text="BAN" FontSize="12" Foreground="#667788" HorizontalAlignment="Center" Margin="0,0,0,4" />
+                        <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                            <Border x:Name="ReplayRedBan0" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" />
+                            <Border x:Name="ReplayRedBan1" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" />
+                        </StackPanel>
+
+                        <TextBlock Text="PICK" FontSize="12" Foreground="#667788" HorizontalAlignment="Center" Margin="0,8,0,4" />
+                        <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+                            <Border x:Name="ReplayRedPick0" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" />
+                            <Border x:Name="ReplayRedPick1" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" />
+                            <Border x:Name="ReplayRedPick2" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" />
+                            <Border x:Name="ReplayRedPick3" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" />
+                            <Border x:Name="ReplayRedPick4" Width="64" Height="64" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" />
+                        </StackPanel>
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+
+            <!-- Action Log -->
+            <Border Grid.Row="1" Background="#0A0E1A" Padding="16,8" Margin="16,8,16,16">
+                <ScrollViewer x:Name="LogScroller">
+                    <StackPanel x:Name="ActionLog" Spacing="4" />
+                </ScrollViewer>
+            </Border>
+
+        </Grid>
+
+        <!-- Controls -->
+        <Border Grid.Row="2" Background="#0F1520" Padding="16,12" BorderBrush="#1A2535" BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
+                <Button x:Name="RestartBtn" Content="重新开始" Click="OnRestartClick" />
+                <Button x:Name="PrevBtn" Content="上一步" Click="OnPrevClick" />
+                <Button x:Name="PlayPauseBtn" Content="播放" Click="OnPlayPauseClick" />
+                <Button x:Name="NextBtn" Content="下一步" Click="OnNextClick" />
+                <TextBlock Text="速度:" Foreground="#8899AA" VerticalAlignment="Center" Margin="16,0,0,0" />
+                <Slider x:Name="SpeedSlider" Width="120" Minimum="0.5" Maximum="5" Value="1" TickFrequency="0.5" IsSnapToTickEnabled="True" VerticalAlignment="Center" />
+                <TextBlock x:Name="SpeedText" Text="1.0x" Foreground="#CCCCCC" VerticalAlignment="Center" Width="40" />
+            </StackPanel>
+        </Border>
+
+    </Grid>
+</Window>
