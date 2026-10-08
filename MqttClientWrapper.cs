@@ -28,6 +28,7 @@ public class MqttClientWrapper : IDisposable
     public event Action? SnapshotRequested;
     public event Action<BpStateSnapshot>? SnapshotReceived;
     public event Action<string, BpSide>? PlayerJoined;
+    public event Action? StartReceived;
 
     public ConnectionState State { get; private set; } = ConnectionState.Disconnected;
     public string RoomId => _roomId;
@@ -75,6 +76,10 @@ public class MqttClientWrapper : IDisposable
                     case "snapshot":
                         if (msg.Snapshot != null && msg.SenderId != _clientId)
                             SnapshotReceived?.Invoke(msg.Snapshot);
+                        break;
+                    case "start":
+                        if (msg.SenderId != _clientId)
+                            StartReceived?.Invoke();
                         break;
                 }
             }
@@ -171,6 +176,19 @@ public class MqttClientWrapper : IDisposable
         if (_client == null || !_client.IsConnected) return;
 
         var msg = new MqttMessage { Type = "snapshot_request", SenderId = _clientId };
+        await PublishAsync(msg);
+    }
+
+    public async Task SendStartAsync()
+    {
+        if (_client == null || !_client.IsConnected) return;
+
+        var msg = new MqttMessage
+        {
+            Type = "start",
+            SenderId = _clientId
+        };
+
         await PublishAsync(msg);
     }
 

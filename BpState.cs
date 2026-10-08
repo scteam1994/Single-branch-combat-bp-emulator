@@ -37,7 +37,7 @@ public class BpState
     public List<string> RedPicks { get; set; } = new();
     public List<string> SystemBans { get; set; } = new();
 
-    public BpSide CurrentSide { get; set; } = BpSide.Blue;
+    public BpSide CurrentSide { get; set; } = BpSide.Red;
     public int CurrentStep { get; set; } = 0;
 
     public List<BpAction> ActionHistory { get; set; } = new();
@@ -137,6 +137,16 @@ public class BpState
         return ownPicks.Contains(heroId);
     }
 
+    public bool IsHeroActionable(string heroId, BpSide side, BpActionType type)
+    {
+        if (type == BpActionType.Ban)
+        {
+            var ownBans = side == BpSide.Blue ? BlueBans : RedBans;
+            return !ownBans.Contains(heroId) && !SystemBans.Contains(heroId);
+        }
+        return !IsHeroUnavailableForSide(heroId, side);
+    }
+
     public BpStateSnapshot GetSnapshot()
     {
         return new BpStateSnapshot
@@ -208,20 +218,20 @@ public class BpConfig
 
     public List<BpSide> SideSequence { get; set; } = new()
     {
-        BpSide.Blue,
-        BpSide.Red,
-        BpSide.Red,
-        BpSide.Blue,
         BpSide.Red,
         BpSide.Blue,
         BpSide.Blue,
         BpSide.Red,
+        BpSide.Blue,
+        BpSide.Red,
+        BpSide.Red,
+        BpSide.Blue,
+        BpSide.Blue,
         BpSide.Red,
         BpSide.Blue,
         BpSide.Red,
-        BpSide.Blue,
-        BpSide.Blue,
-        BpSide.Red
+        BpSide.Red,
+        BpSide.Blue
     };
 
     public int TotalSteps => ActionSequence.Count;

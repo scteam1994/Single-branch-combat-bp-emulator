@@ -31,6 +31,8 @@
                     <Border x:Name="TimerBorder" Width="48" Height="48" CornerRadius="24" Background="#1A2332" BorderBrush="#2A3A4A" BorderThickness="2" VerticalAlignment="Center">
                         <TextBlock x:Name="TimerText" Text="--" FontSize="18" FontWeight="Bold" Foreground="#FFD700" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
+                    <Button x:Name="StartBtn" Content="开始BP" Click="OnStartClick" IsVisible="False" IsEnabled="False"
+                            Background="#2E7D32" Foreground="White" FontWeight="Bold" Padding="16,6" VerticalAlignment="Center" />
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
@@ -45,33 +47,8 @@
         <!-- Main Content: Blue Sidebar | Hero Grid | Red Sidebar -->
         <Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto">
 
-            <!-- Blue Side Panel -->
+            <!-- Red Side Panel (LEFT) -->
             <Border Grid.Column="0" Width="150" Background="#0D1220" Padding="10,12" BorderBrush="#1A2535" BorderThickness="0,0,1,0">
-                <StackPanel Spacing="6">
-                    <TextBlock Text="蓝色方" FontSize="16" FontWeight="Bold" Foreground="#4A9EFF" HorizontalAlignment="Center" Margin="0,0,0,6" />
-
-                    <TextBlock Text="BAN" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,0,0,2" />
-                    <Border x:Name="BlueBan0" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
-                    <Border x:Name="BlueBan1" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
-
-                    <TextBlock Text="PICK" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,8,0,2" />
-                    <Border x:Name="BluePick0" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="BluePick1" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="BluePick2" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="BluePick3" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="BluePick4" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
-                </StackPanel>
-            </Border>
-
-            <!-- Center: Hero Grid -->
-            <Border Grid.Column="1" Background="#0A0E1A" Padding="12">
-                <ScrollViewer>
-                    <StackPanel x:Name="HeroGrid" Spacing="4" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                </ScrollViewer>
-            </Border>
-
-            <!-- Red Side Panel -->
-            <Border Grid.Column="2" Width="150" Background="#0D1220" Padding="10,12" BorderBrush="#1A2535" BorderThickness="1,0,0,0">
                 <StackPanel Spacing="6">
                     <TextBlock Text="红色方" FontSize="16" FontWeight="Bold" Foreground="#FF4A4A" HorizontalAlignment="Center" Margin="0,0,0,6" />
 
@@ -85,6 +62,31 @@
                     <Border x:Name="RedPick2" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
                     <Border x:Name="RedPick3" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
                     <Border x:Name="RedPick4" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
+                </StackPanel>
+            </Border>
+
+            <!-- Center: Hero Grid -->
+            <Border Grid.Column="1" Background="#0A0E1A" Padding="12">
+                <ScrollViewer>
+                    <StackPanel x:Name="HeroGrid" Spacing="4" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </ScrollViewer>
+            </Border>
+
+            <!-- Blue Side Panel (RIGHT) -->
+            <Border Grid.Column="2" Width="150" Background="#0D1220" Padding="10,12" BorderBrush="#1A2535" BorderThickness="1,0,0,0">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="蓝色方" FontSize="16" FontWeight="Bold" Foreground="#4A9EFF" HorizontalAlignment="Center" Margin="0,0,0,6" />
+
+                    <TextBlock Text="BAN" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,0,0,2" />
+                    <Border x:Name="BlueBan0" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
+                    <Border x:Name="BlueBan1" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
+
+                    <TextBlock Text="PICK" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,8,0,2" />
+                    <Border x:Name="BluePick0" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick1" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick2" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick3" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick4" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
                 </StackPanel>
             </Border>
 

@@ -25,6 +25,10 @@ public partial class MainWindow : Window
     private Random _random = new();
     private BpSide _localSide = BpSide.Blue;
     private bool _bothPlayersReady;
+    private bool _bpStarted;
+    private bool _displayPhase;
+    private DispatcherTimer? _displayTimer;
+    private int _displaySeconds;
 
     public MainWindow()
     {
@@ -40,6 +44,7 @@ public partial class MainWindow : Window
         _mqtt.SnapshotRequested += OnSnapshotRequested;
         _mqtt.SnapshotReceived += OnSnapshotReceived;
         _mqtt.PlayerJoined += OnPlayerJoined;
+        _mqtt.StartReceived += OnRemoteStart;
 
         LoadHeroes();
         BuildHeroGrid();
@@ -208,6 +213,18 @@ public partial class MainWindow : Window
             return;
         }
 
+        if (!_bpStarted)
+        {
+            StatusBar.Text = "等待双方就绪后点击开始BP";
+            return;
+        }
+
+        if (_displayPhase)
+        {
+            StatusBar.Text = "禁用展示阶段，暂不能操作";
+            return;
+        }
+
         if (_state.IsFinished)
         {
             StatusBar.Text = "对局已结束";
@@ -220,9 +237,11 @@ public partial class MainWindow : Window
             return;
         }
 
-        if (_state.IsHeroUnavailableForSide(hero.HeroId, _state.CurrentSide))
+        if (!_state.IsHeroActionable(hero.HeroId, _state.CurrentSide, _state.GetCurrentActionType()))
         {
-            StatusBar.Text = "该单位已被禁用或你方已选过";
+            StatusBar.Text = _state.GetCurrentActionType() == BpActionType.Ban
+                ? "该单位已被你方禁用"
+                : "该单位不可选用";
             return;
         }
 
@@ -296,9 +315,14 @@ public partial class MainWindow : Window
     {
         await _mqtt.DisconnectAsync();
         StopTimer();
+        _displayTimer?.Stop();
+        _displayTimer = null;
+        _displayPhase = false;
+        _displaySeconds = 0;
         _state = new BpState(_config);
         _isLocalTurn = false;
         _bothPlayersReady = false;
+        _bpStarted = false;
         _systemBansInitialized = false;
         _backupSeconds = _config.BackupTimerSeconds;
         ConnectBtn.IsEnabled = true;
@@ -306,6 +330,9 @@ public partial class MainWindow : Window
         DisconnectBtn.IsVisible = false;
         ExportBtn.IsVisible = false;
         ReplayBtn.IsVisible = false;
+        StartBtn.IsVisible = false;
+        StartBtn.IsEnabled = false;
+        SideSelector.IsEnabled = true;
         StatusBar.Text = "已断开";
         UpdateUI();
         UpdateHeroStates();
@@ -324,7 +351,6 @@ public partial class MainWindow : Window
                     DisconnectBtn.IsVisible = true;
                     ConnectBtn.IsEnabled = true;
                     StatusBar.Text = $"已连接到房间 - 你是{(_localSide == BpSide.Blue ? "蓝色方" : "红色方")}，等待对方加入...";
-                    InitializeSystemBans();
                     _ = _mqtt.SendJoinAsync(_localSide);
                     break;
 
@@ -353,13 +379,85 @@ public partial class MainWindow : Window
             _bothPlayersReady = true;
             _ = _mqtt.SendJoinAsync(_localSide);
 
-            StatusBar.Text = "双方已就绪，开始BP！";
+            if (_bpStarted) return;
+
+            StartBtn.IsVisible = true;
+            StartBtn.IsEnabled = true;
+            StatusBar.Text = "双方已就绪，点击开始BP按钮开始对局";
+            UpdateUI();
+        });
+    }
+
+    private void OnRemoteStart()
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (_bpStarted) return;
+            StartBpPhase();
+        });
+    }
+
+    private void OnStartClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (!_bothPlayersReady || _bpStarted) return;
+        _ = _mqtt.SendStartAsync();
+        StartBpPhase();
+    }
+
+    private void StartBpPhase()
+    {
+        _bpStarted = true;
+        StartBtn.IsVisible = false;
+        StartBtn.IsEnabled = false;
+
+        InitializeSystemBans();
+        _displayPhase = true;
+        _isLocalTurn = false;
+
+        _displaySeconds = 10;
+        TimerText.Text = _displaySeconds.ToString();
+        TimerBorder.BorderBrush = new SolidColorBrush(Color.Parse("#FF8C00"));
+        StatusBar.Text = "系统随机禁用完成，请查看禁用单位 (10秒后开始BP)";
+        UpdateUI();
+        UpdateHeroStates();
+
+        _displayTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(1)
+        };
+        _displayTimer.Tick += DisplayTimer_Tick;
+        _displayTimer.Start();
+    }
+
+    private void DisplayTimer_Tick(object? sender, EventArgs e)
+    {
+        _displaySeconds--;
+
+        if (_displaySeconds <= 0)
+        {
+            _displayTimer?.Stop();
+            _displayTimer = null;
+            _displayPhase = false;
+
             _isLocalTurn = _state.CurrentSide == _localSide;
             UpdateUI();
+            UpdateHeroStates();
 
             if (_isLocalTurn)
+            {
                 StartTimer();
-        });
+            }
+            else
+            {
+                TimerText.Text = "--";
+                TimerBorder.BorderBrush = new SolidColorBrush(Color.Parse("#2A3A4A"));
+                StatusBar.Text = "BP开始，等待对方操作";
+            }
+            return;
+        }
+
+        TimerText.Text = _displaySeconds.ToString();
+        StatusBar.Text = $"系统随机禁用完成，请查看禁用单位 ({_displaySeconds}秒后开始BP)";
     }
 
     private void OnActionReceived(BpAction action)
@@ -419,6 +517,8 @@ public partial class MainWindow : Window
         {
             _state.LoadSnapshot(snapshot);
             _systemBansInitialized = _state.SystemBans.Count > 0;
+            if (_state.SystemBans.Count > 0 || _state.ActionHistory.Count > 0)
+                _bpStarted = true;
             _isLocalTurn = _state.CurrentSide == _localSide;
             UpdateUI();
             UpdateHeroStates();
@@ -444,8 +544,9 @@ public partial class MainWindow : Window
 
     private void UpdateUI()
     {
-        UpdateSlot("BlueBan", _state.BlueBans, 2, true);
-        UpdateSlot("RedBan", _state.RedBans, 2, true);
+        // ban 显示在对方列表：红方(左)的 ban 显示在右列，蓝方(右)的 ban 显示在左列
+        UpdateSlot("BlueBan", _state.RedBans, 2, true);
+        UpdateSlot("RedBan", _state.BlueBans, 2, true);
         UpdateSlot("BluePick", _state.BluePicks, 5, false);
         UpdateSlot("RedPick", _state.RedPicks, 5, false);
 
@@ -535,26 +636,45 @@ public partial class MainWindow : Window
             if (rowPanel is not StackPanel row) continue;
             foreach (var child in row.Children)
             {
-                if (child is Border border && border.Tag is HeroData hero)
+                if (child is not Border border || border.Tag is not HeroData hero) continue;
+
+                bool blocked;
+
+                if (!_bpStarted)
                 {
-                    if (_state.IsHeroUnavailableForSide(hero.HeroId, _localSide))
-                    {
-                        border.Opacity = 0.3;
-                        border.IsHitTestVisible = false;
-                    }
-                    else
-                    {
-                        border.Opacity = 1.0;
-                        border.IsHitTestVisible = true;
-                    }
+                    // 对局未开始：不置灰，但不可点击
+                    blocked = false;
+                    border.Opacity = 1.0;
+                    border.IsHitTestVisible = false;
+                    continue;
                 }
+
+                if (_displayPhase)
+                {
+                    // 展示阶段：仅系统禁用置灰，全体不可点击
+                    blocked = _state.SystemBans.Contains(hero.HeroId);
+                    border.IsHitTestVisible = false;
+                }
+                else if (_state.IsFinished)
+                {
+                    blocked = _state.IsHeroUnavailableForSide(hero.HeroId, _localSide);
+                    border.IsHitTestVisible = false;
+                }
+                else
+                {
+                    var currentType = _state.GetCurrentActionType();
+                    blocked = !_state.IsHeroActionable(hero.HeroId, _localSide, currentType);
+                    border.IsHitTestVisible = !blocked;
+                }
+
+                border.Opacity = blocked ? 0.3 : 1.0;
             }
         }
     }
 
     private void StartTimer()
     {
-        if (!_bothPlayersReady) return;
+        if (!_bothPlayersReady || !_bpStarted || _displayPhase) return;
 
         StopTimer();
 
@@ -614,11 +734,12 @@ public partial class MainWindow : Window
     {
         StatusBar.Text = "超时，系统自动操作";
 
-        var available = _heroes.Where(h => !_state.IsHeroUnavailableForSide(h.HeroId, _state.CurrentSide)).ToList();
+        var currentType = _state.GetCurrentActionType();
+        var available = _heroes.Where(h => _state.IsHeroActionable(h.HeroId, _state.CurrentSide, currentType)).ToList();
         if (available.Count == 0) return;
 
         var randomHero = available[_random.Next(available.Count)];
-        var actionType = _state.GetCurrentActionType();
+        var actionType = currentType;
         var action = new BpAction
         {
             Side = _state.CurrentSide,
