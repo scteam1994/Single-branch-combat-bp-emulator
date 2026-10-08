@@ -88,81 +88,94 @@ public partial class MainWindow : Window
     {
         HeroGrid.Children.Clear();
 
+        const int perRow = 10;
         var rows = _heroes.GroupBy(h => h.Row).OrderBy(g => g.Key);
 
         foreach (var rowGroup in rows)
         {
-            var rowPanel = new StackPanel
-            {
-                Orientation = Orientation.Horizontal,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                Spacing = 4
-            };
+            StackPanel? currentRow = null;
+            int countInRow = 0;
 
             foreach (var hero in rowGroup)
             {
-                var border = new Border
+                if (currentRow == null || countInRow >= perRow)
                 {
-                    Width = 72,
-                    Height = 72,
-                    Margin = new Thickness(2),
-                    CornerRadius = new CornerRadius(4),
-                    Background = new SolidColorBrush(Color.Parse("#1A2332")),
-                    BorderBrush = new SolidColorBrush(Color.Parse("#2A3A4A")),
-                    BorderThickness = new Thickness(1),
-                    Tag = hero,
-                    Cursor = new Cursor(StandardCursorType.Hand)
-                };
-
-                var grid = new Grid();
-                grid.RowDefinitions.Add(new RowDefinition(GridLength.Star));
-                grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
-
-                var imagePath = System.IO.Path.Combine(AppContext.BaseDirectory, hero.ImagePath);
-                if (System.IO.File.Exists(imagePath))
-                {
-                    var img = new Image
+                    currentRow = new StackPanel
                     {
-                        Source = new Bitmap(imagePath),
-                        Stretch = Stretch.UniformToFill
+                        Orientation = Orientation.Horizontal,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        Spacing = 6
                     };
-                    Grid.SetRow(img, 0);
-                    grid.Children.Add(img);
+                    HeroGrid.Children.Add(currentRow);
+                    countInRow = 0;
                 }
 
-                var nameText = new TextBlock
-                {
-                    Text = hero.HeroName,
-                    FontSize = 11,
-                    Foreground = new SolidColorBrush(Color.Parse("#CCCCCC")),
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    TextTrimming = TextTrimming.CharacterEllipsis,
-                    Margin = new Thickness(2, 2, 2, 4)
-                };
-                Grid.SetRow(nameText, 1);
-                grid.Children.Add(nameText);
-
-                border.Child = grid;
-
-                border.PointerEntered += (s, e) =>
-                {
-                    if (border.Opacity > 0.9)
-                        border.BorderBrush = new SolidColorBrush(Color.Parse("#FFD700"));
-                };
-
-                border.PointerExited += (s, e) =>
-                {
-                    if (border.Opacity > 0.9)
-                        border.BorderBrush = new SolidColorBrush(Color.Parse("#2A3A4A"));
-                };
-
-                border.PointerPressed += (s, e) => OnHeroClick(hero);
-
-                rowPanel.Children.Add(border);
+                currentRow.Children.Add(CreateHeroCell(hero));
+                countInRow++;
             }
-
-            HeroGrid.Children.Add(rowPanel);
         }
+    }
+
+    private Border CreateHeroCell(HeroData hero)
+    {
+        var border = new Border
+        {
+            Width = 104,
+            Height = 104,
+            Margin = new Thickness(2),
+            CornerRadius = new CornerRadius(4),
+            Background = new SolidColorBrush(Color.Parse("#1A2332")),
+            BorderBrush = new SolidColorBrush(Color.Parse("#2A3A4A")),
+            BorderThickness = new Thickness(1),
+            Tag = hero,
+            Cursor = new Cursor(StandardCursorType.Hand)
+        };
+
+        var grid = new Grid();
+        grid.RowDefinitions.Add(new RowDefinition(GridLength.Star));
+        grid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+
+        var imagePath = System.IO.Path.Combine(AppContext.BaseDirectory, hero.ImagePath);
+        if (System.IO.File.Exists(imagePath))
+        {
+            var img = new Image
+            {
+                Source = new Bitmap(imagePath),
+                Stretch = Stretch.Uniform
+            };
+            Grid.SetRow(img, 0);
+            grid.Children.Add(img);
+        }
+
+        var nameText = new TextBlock
+        {
+            Text = hero.HeroName,
+            FontSize = 11,
+            Foreground = new SolidColorBrush(Color.Parse("#CCCCCC")),
+            HorizontalAlignment = HorizontalAlignment.Center,
+            TextTrimming = TextTrimming.CharacterEllipsis,
+            Margin = new Thickness(2, 2, 2, 4)
+        };
+        Grid.SetRow(nameText, 1);
+        grid.Children.Add(nameText);
+
+        border.Child = grid;
+
+        border.PointerEntered += (s, e) =>
+        {
+            if (border.Opacity > 0.9)
+                border.BorderBrush = new SolidColorBrush(Color.Parse("#FFD700"));
+        };
+
+        border.PointerExited += (s, e) =>
+        {
+            if (border.Opacity > 0.9)
+                border.BorderBrush = new SolidColorBrush(Color.Parse("#2A3A4A"));
+        };
+
+        border.PointerPressed += (s, e) => OnHeroClick(hero);
+
+        return border;
     }
 
     private void InitializeSystemBans()
@@ -476,7 +489,7 @@ public partial class MainWindow : Window
                         var img = new Image
                         {
                             Source = new Bitmap(imagePath),
-                            Stretch = Stretch.UniformToFill
+                            Stretch = Stretch.Uniform
                         };
                         border.Child = img;
                     }

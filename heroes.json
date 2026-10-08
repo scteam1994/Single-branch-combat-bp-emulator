@@ -47,7 +47,7 @@
   {"heroId": "hightemplar", "heroName": "高阶圣堂武士", "imagePath": "assets/hightemplar.png", "row": 5},
   {"heroId": "darktemplar", "heroName": "黑暗圣堂武士", "imagePath": "assets/darktemplar.png", "row": 5},
   {"heroId": "archon", "heroName": "执政官", "imagePath": "assets/archon.png", "row": 5},
-  {"heroId": "disruptor", "heroName": "干扰者", "imagePath": "assets/disruptor.png", "row": 5},
+  {"heroId": "disruptor", "heroName": "干扰者", "imagePath": "assets/disruptor.png", "row": 6},
   
   {"heroId": "carrier", "heroName": "航母", "imagePath": "assets/carrier.png", "row": 6},
   {"heroId": "oracle", "heroName": "先知", "imagePath": "assets/oracle.png", "row": 6},
@@ -56,5 +56,6 @@
   {"heroId": "observer", "heroName": "侦察机", "imagePath": "assets/observer.png", "row": 6},
   {"heroId": "corsair", "heroName": "海盗", "imagePath": "assets/corsair.png", "row": 6},
   {"heroId": "arbiter", "heroName": "金甲", "imagePath": "assets/arbiter.png", "row": 6},
-  {"heroId": "guardian2", "heroName": "螃蟹", "imagePath": "assets/guardian2.png", "row": 6}
+  {"heroId": "phoenix", "heroName": "凤凰", "imagePath": "assets/phoenix.png", "row": 6},
+  {"heroId": "voidray", "heroName": "虚空", "imagePath": "assets/voidray.png", "row": 6}
 ]

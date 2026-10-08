@@ -3,8 +3,8 @@
         xmlns:local="using:BPTrainer"
         x:Class="BPTrainer.MainWindow"
         Title="BP Trainer - BanPick远程对练"
-        Width="1400" Height="900"
-        MinWidth="1200" MinHeight="800"
+        Width="1500" Height="980"
+        MinWidth="1300" MinHeight="860"
         Background="#0A0E1A"
         WindowStartupLocation="CenterScreen">
 
@@ -51,15 +51,15 @@
                     <TextBlock Text="蓝色方" FontSize="16" FontWeight="Bold" Foreground="#4A9EFF" HorizontalAlignment="Center" Margin="0,0,0,6" />
 
                     <TextBlock Text="BAN" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,0,0,2" />
-                    <Border x:Name="BlueBan0" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
-                    <Border x:Name="BlueBan1" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
+                    <Border x:Name="BlueBan0" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
+                    <Border x:Name="BlueBan1" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
 
                     <TextBlock Text="PICK" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,8,0,2" />
-                    <Border x:Name="BluePick0" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="BluePick1" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="BluePick2" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="BluePick3" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="BluePick4" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick0" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick1" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick2" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick3" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="BluePick4" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#4A9EFF" BorderThickness="2" HorizontalAlignment="Center" />
                 </StackPanel>
             </Border>
 
@@ -76,15 +76,15 @@
                     <TextBlock Text="红色方" FontSize="16" FontWeight="Bold" Foreground="#FF4A4A" HorizontalAlignment="Center" Margin="0,0,0,6" />
 
                     <TextBlock Text="BAN" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,0,0,2" />
-                    <Border x:Name="RedBan0" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
-                    <Border x:Name="RedBan1" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
+                    <Border x:Name="RedBan0" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
+                    <Border x:Name="RedBan1" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#2A3A4A" BorderThickness="1" HorizontalAlignment="Center" />
 
                     <TextBlock Text="PICK" FontSize="11" Foreground="#667788" HorizontalAlignment="Center" Margin="0,8,0,2" />
-                    <Border x:Name="RedPick0" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="RedPick1" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="RedPick2" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="RedPick3" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
-                    <Border x:Name="RedPick4" Width="56" Height="56" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="RedPick0" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="RedPick1" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="RedPick2" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="RedPick3" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
+                    <Border x:Name="RedPick4" Width="72" Height="72" Background="#1A2332" CornerRadius="4" BorderBrush="#FF4A4A" BorderThickness="2" HorizontalAlignment="Center" />
                 </StackPanel>
             </Border>
 
